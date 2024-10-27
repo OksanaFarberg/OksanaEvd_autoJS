@@ -1,7 +1,7 @@
 import user from '../framework/services'
 import config from '../framework/config'
 
-// в переменные положим значения после создания пользователя
+// в переменные запишем значения после создания пользователя
 let MyUserID = ''
 let MyToken = ''
 
