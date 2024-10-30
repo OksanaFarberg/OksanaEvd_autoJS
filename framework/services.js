@@ -6,12 +6,12 @@ const { url } = config
 let token
 
 const user = {
-  create: ({ userName, password }) => {
+   create: ({ userName, password }) => {
     return supertest(url).post('/Account/v1/User').send({
       userName,
       password,
-    })
-  },
+    })  
+},
 
   token: payload => {
     return supertest(url)
@@ -33,7 +33,7 @@ const user = {
       .get(`/Account/v1/User/${userId}`)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
-    // .send(payload)
+     
   },
 
   delete: ({ userId, token }) => {
@@ -41,7 +41,7 @@ const user = {
       .delete(`/Account/v1/User/${userId}`)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
-    // .send()
+     
   },
 }
 

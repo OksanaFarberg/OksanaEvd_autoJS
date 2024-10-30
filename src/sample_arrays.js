@@ -50,3 +50,15 @@ const obj = arr.reduce(
   },
 )
 console.log(obj)
+
+let e = 0;
+
+const summ = (a,b) => { 
+  let sum = a + b
+  console.log(e)
+  e = sum
+  console.log(e)
+  //return sum
+}
+summ(1,2)
+console.log(e);
