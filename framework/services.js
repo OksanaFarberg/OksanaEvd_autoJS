@@ -19,7 +19,7 @@ const user = {
       .set('Accept', 'application/json')
       .send(payload)
   },
-
+ 
   authorization: payload => {
     return supertest(url)
       .post('/Account/v1/Authorized')

@@ -9,7 +9,7 @@ describe("Тесты  bookstore через supertest", () => {
   describe("Создание пользователя", () => {
     test("Успешная создание", async () => {
       const res = await user.create(config.credential);
-      // console.log('MyUserID получили-', res.body.userID);
+      // console.log('MyUserID получили -', res.body.userID);
 
       expect(res.status).toBe(201);
       expect(res.body.userID).toBeTruthy();
@@ -72,3 +72,4 @@ describe("Тесты  bookstore через supertest", () => {
     });
   });
 });
+

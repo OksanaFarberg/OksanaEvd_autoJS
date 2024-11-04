@@ -54,11 +54,11 @@ console.log(obj)
 let e = 0;
 
 const summ = (a,b) => { 
-  let sum = a + b
+  const sum = a + b
   console.log(e)
   e = sum
   console.log(e)
-  //return sum
+  // return sum
 }
 summ(1,2)
 console.log(e);

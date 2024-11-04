@@ -1,5 +1,5 @@
 // базовый урл, логин / пароль
-
+ 
 const config = {
   url: 'https://bookstore.demoqa.com',
   credential: {
@@ -7,5 +7,5 @@ const config = {
     password: '123456Aa@',
   },
 }
-
+ 
 export default config
