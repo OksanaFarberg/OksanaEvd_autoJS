@@ -8,7 +8,7 @@ describe('kolobok function', () => {
 
   it('should return the correct response for заяц', () => {
     const result = kolobok('заяц')
-    expect(result).toBe('Я от зайца ушёл')
+    expect(result).toBe('Я от зайчика ушёл')
   })
 
   it('should return the correct response for лиса', () => {
