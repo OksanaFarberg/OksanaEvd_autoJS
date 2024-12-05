@@ -1,15 +1,21 @@
-import user from "../framework/services";
-import config from "../framework/config";
+import { bookService, user } from "../framework/services/services";
+import config from "../framework/config/config";
+import { books } from "../framework/fixtures/Books";
 
 describe("Тесты  bookstore через supertest", () => {
   // в переменные запишем значения после создания пользователя
   let MyUserID = "";
   let MyToken = "";
+  const [book1, book2] = books
+  const isbn = book1.isbn
+  console.log(isbn);
+   
+ 
 
   describe("Создание пользователя", () => {
     test("Успешная создание", async () => {
       const res = await user.create(config.credential);
-      // console.log('MyUserID получили-', res.body.userID);
+      console.log("MyUserID получили-", res.body.userID);
 
       expect(res.status).toBe(201);
       expect(res.body.userID).toBeTruthy();
@@ -51,9 +57,31 @@ describe("Тесты  bookstore через supertest", () => {
         userId: MyUserID,
         token: MyToken,
       });
+      console.log("мой юзер айди", MyUserID);
       expect(responseInfo.status).toBe(200);
     });
   });
+// ---------------------------------------------------------------
+
+  describe("Создание книги", () => {
+    test("Успешное создание книги", async () => {
+     
+      if (MyToken) {
+        console.log("Токен получен -", MyToken);
+        console.log("ISBN получен -", isbn);
+      }
+      const responseCreateBook = await bookService.createBook({
+      MyUserID, 
+      isbns: [isbn], 
+      MyToken
+     
+    });
+
+  expect(responseCreateBook.status).toBe(201);
+
+    });
+  });
+
 
   describe("Удаление пользователя", () => {
     test("Успешное удаление", async () => {
@@ -71,5 +99,5 @@ describe("Тесты  bookstore через supertest", () => {
       expect(responseInfo.body.message).toBe("User not found!");
     });
   });
-});
 
+});
