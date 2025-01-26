@@ -71,9 +71,9 @@ describe("Тесты  bookstore через supertest", () => {
         console.log("ISBN получен -", isbn);
       }
       const responseCreateBook = await bookService.createBook({
-      MyUserID, 
+      userId: MyUserID, 
       isbns: [isbn], 
-      MyToken
+      token: MyToken
      
     });
 
