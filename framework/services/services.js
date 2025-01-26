@@ -73,6 +73,17 @@ return {
   data: response.body
 }} ,
 
+getInfoBook: async ({ isbn, token}) => {
+  const response = await supertest(url)
+  .get(`/BookStore/v1/Book?ISBN=${isbn}`)
+  .set('Authorization', `Bearer ${token}`)
+  .set('Accept', 'application/json')
+  return {
+    status: response.status,
+    data: response.body
+  }
+},
+
 deleteBook: async ({ userId, isbn, token}) => {
 const payload = {
  

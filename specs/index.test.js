@@ -6,9 +6,10 @@ describe("Тесты  bookstore через supertest", () => {
   // в переменные запишем значения после создания пользователя
   let MyUserID = "";
   let MyToken = "";
-  const [book1, book2] = books
+  
+  const [book1] = books
   const isbn = book1.isbn
-  console.log(isbn);
+  console.log('что я такое???', isbn);
    
  
 
@@ -78,7 +79,23 @@ describe("Тесты  bookstore через supertest", () => {
     });
 
   expect(responseCreateBook.status).toBe(201);
+  console.log('а вот статус созданой книги',responseCreateBook.status);
+  console.log('а это isbn книги созданой', responseCreateBook.data);
 
+    });
+  });
+
+  describe("Получение информации о книге", () => {
+
+    test("Успешное получение информации о книге", async () => {
+      const responseInfoBook = await bookService.getInfoBook({
+        isbn,
+        token: MyToken,
+      });
+   
+      console.log(responseInfoBook.status);
+      console.log(responseInfoBook.body);
+      expect(responseInfoBook.status).toBe(200);
     });
   });
 
