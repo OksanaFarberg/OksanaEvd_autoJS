@@ -7,7 +7,7 @@ describe("Тесты  bookstore через supertest", () => {
   let MyUserID = "";
   let MyToken = "";
   
-  const [book1] = books
+  const [book1, book2] = books
   const isbn = book1.isbn
   console.log('что я такое???', isbn);
    
@@ -92,23 +92,40 @@ describe("Тесты  bookstore через supertest", () => {
         isbn,
         token: MyToken,
       });
-   
-      console.log(responseInfoBook.status);
-      console.log(responseInfoBook.body);
+      console.log('получаем инфу о книге', responseInfoBook.data);
       expect(responseInfoBook.status).toBe(200);
     });
   });
 
+  describe("Обновление книги", () => {
+    test("Успешное обновление книги", async () => {
+      const responseUpdateBook = await bookService.updateBook({
+        userId: MyUserID,
+        isbn,
+        newIsbn: book2.isbn,
+        token: MyToken,
+      });
+      console.log('cnfnec j,обновления статус rybub', responseUpdateBook.status);
+      console.log('обновляшка книги', responseUpdateBook.data);
+      expect(responseUpdateBook.status).toBe(200);
+    });
+  });
+
+  /*
+    expect(responseAddBook.data).toEqual({
+      books: [book2],
+      userId,
+      username: config.username
+*/
+//
   describe('Удаление книги', () => {
     test('Успешное удаление книги', async () => {
       const responseDeleteBook = await bookService.deleteBook({
         userId: MyUserID,
-        isbn,
+        isbn: book2.isbn,
         token: MyToken,
       });
-      console.log(responseDeleteBook);
-      console.log(responseDeleteBook.status);
-      console.log(responseDeleteBook.body);
+     console.log('удаление книги', responseDeleteBook.data);
       expect(responseDeleteBook.status).toBe(204);
     });
   });

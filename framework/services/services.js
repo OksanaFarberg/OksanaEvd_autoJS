@@ -83,6 +83,23 @@ getInfoBook: async ({ isbn, token}) => {
     data: response.body
   }
 },
+// --- я тутт роботооою
+updateBook: async ({ userId, newIsbn, isbn, token}) => {
+  const payload = {
+      userId,
+      isbn: newIsbn
+  }
+  const response = await supertest(url)
+  .put(`/BookStore/v1/Books/${isbn}`)
+  .set('Authorization', `Bearer ${token}`)
+  .set('Accept', 'application/json')
+  .send(payload)
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.body
+  }
+},  
 
 deleteBook: async ({ userId, isbn, token}) => {
 const payload = {
