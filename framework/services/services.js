@@ -57,6 +57,7 @@ const bookService = {
 
   createBook: async ({ userId, isbns, token}) => {
     const payload = {
+      
       userId,
       collectionOfIsbns: isbns.map(isbn => ({ isbn }))
     }
@@ -70,7 +71,26 @@ return {
   headers: response.headers,
   status: response.status,
   data: response.body
-}}
+}} ,
+
+deleteBook: async ({ userId, isbn, token}) => {
+const payload = {
+ 
+        isbn: isbn,
+        userId
+}
+
+  const response = await supertest(url)
+  .delete(`/BookStore/v1/Book`)
+  .set('Authorization', `Bearer ${token}`)
+  .set('Accept', 'application/json')
+  .send(payload)
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.body
+  }
+}
 
 }
 

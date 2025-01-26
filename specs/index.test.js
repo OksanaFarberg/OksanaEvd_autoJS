@@ -82,7 +82,21 @@ describe("Тесты  bookstore через supertest", () => {
     });
   });
 
+  describe('Удаление книги', () => {
+    test('Успешное удаление книги', async () => {
+      const responseDeleteBook = await bookService.deleteBook({
+        userId: MyUserID,
+        isbn,
+        token: MyToken,
+      });
+      console.log(responseDeleteBook);
+      console.log(responseDeleteBook.status);
+      console.log(responseDeleteBook.body);
+      expect(responseDeleteBook.status).toBe(204);
+    });
+  });
 
+// ---------------------------------------------------------------
   describe("Удаление пользователя", () => {
     test("Успешное удаление", async () => {
       const responseDelete = await user.delete({
