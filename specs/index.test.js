@@ -6,12 +6,10 @@ describe("Тесты  bookstore через supertest", () => {
   // в переменные запишем значения после создания пользователя
   let MyUserID = "";
   let MyToken = "";
-  
-  const [book1, book2] = books
-  const isbn = book1.isbn
-  console.log('что я такое???', isbn);
-   
- 
+
+  const [book1, book2] = books;
+  const isbn = book1.isbn;
+
 
   describe("Создание пользователя", () => {
     test("Успешная создание", async () => {
@@ -62,40 +60,70 @@ describe("Тесты  bookstore через supertest", () => {
       expect(responseInfo.status).toBe(200);
     });
   });
-// ---------------------------------------------------------------
+  // ---------------------------------------------------------------
 
   describe("Создание книги", () => {
     test("Успешное создание книги", async () => {
-     
       if (MyToken) {
-        console.log("Токен получен -", MyToken);
+        // console.log("Токен получен -", MyToken);
         console.log("ISBN получен -", isbn);
       }
       const responseCreateBook = await bookService.createBook({
-      userId: MyUserID, 
-      isbns: [isbn], 
-      token: MyToken
-     
+        userId: MyUserID,
+        isbns: [isbn],
+        token: MyToken,
+      });
+
+      expect(responseCreateBook.status).toBe(201);
+      
     });
 
-  expect(responseCreateBook.status).toBe(201);
-  console.log('а вот статус созданой книги',responseCreateBook.status);
-  console.log('а это isbn книги созданой', responseCreateBook.data);
 
+  test("Отсутствие токена", async () => {
+    const responseCreateBook = await bookService.createBook({
+      userId: MyUserID,
+      isbns: [isbn],
+      token: null,
     });
+
+    expect(responseCreateBook.status).toBe(401); 
   });
 
-  describe("Получение информации о книге", () => {
+  test("Неверный ISBN", async () => {
+    const invalidIsbn = "0002100001200010101";
+    const responseCreateBook = await bookService.createBook({
+      userId: MyUserID,
+      isbns: [invalidIsbn],
+      token: MyToken,
+    });
 
+    expect(responseCreateBook.status).toBe(400);
+  });
+
+  test("Пустой массив ISBN", async () => {
+    const emptyArrayIsbn = [];
+    const responseCreateBook = await bookService.createBook({
+      userId: MyUserID,
+      isbns: emptyArrayIsbn,
+      token: MyToken,
+    });
+
+    expect(responseCreateBook.status).toBe(400); 
+  });
+
+  });
+  describe("Получение информации о книге", () => {
     test("Успешное получение информации о книге", async () => {
       const responseInfoBook = await bookService.getInfoBook({
         isbn,
         token: MyToken,
       });
-      console.log('получаем инфу о книге', responseInfoBook.data);
+      // console.log("получаем инфу о книге", responseInfoBook.data);
       expect(responseInfoBook.status).toBe(200);
     });
   });
+
+
 
   describe("Обновление книги", () => {
     test("Успешное обновление книги", async () => {
@@ -105,32 +133,63 @@ describe("Тесты  bookstore через supertest", () => {
         newIsbn: book2.isbn,
         token: MyToken,
       });
-      console.log('cnfnec j,обновления статус rybub', responseUpdateBook.status);
-      console.log('обновляшка книги', responseUpdateBook.data);
+     
+      // console.log("обновляшка книги", responseUpdateBook.data);
       expect(responseUpdateBook.status).toBe(200);
     });
   });
 
-  /*
-    expect(responseAddBook.data).toEqual({
-      books: [book2],
-      userId,
-      username: config.username
-*/
-//
-  describe('Удаление книги', () => {
-    test('Успешное удаление книги', async () => {
+  describe("Удаление книги", () => {
+    test("Успешное удаление книги", async () => {
       const responseDeleteBook = await bookService.deleteBook({
         userId: MyUserID,
         isbn: book2.isbn,
         token: MyToken,
       });
-     console.log('удаление книги', responseDeleteBook.data);
+      // console.log("удаление книги", responseDeleteBook.data);
       expect(responseDeleteBook.status).toBe(204);
     });
   });
+// Добавила параметриз. тест создания книги, но это выглядит очень громоздко
 
-// ---------------------------------------------------------------
+/* 
+describe("Параметр.тесты создания книги", () => {
+  const validIsbns = ['9781449325862', '9781449365035'];
+  const invalidIsbns = ['0123', '456'];
+  const emptyArrayIsbn = [];
+
+  test.each([
+    { description: "парам.Успешное создание книги", isbn: validIsbns[0] },
+    { description: "парам.Отсутствие токена", isbn: validIsbns[0] },
+    { description: "парам.Неверный ISBN", isbn: invalidIsbns[0] },
+    { description: "парам.Пустой массив ISBN", isbn: emptyArrayIsbn }
+  ])(
+    "%s",
+    async ({ description, isbn }) => {
+      if (MyToken) {
+        console.log("Токен получен -", MyToken);
+        console.log("ISBN получен -", isbn);
+      }
+
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: [isbn],
+        token: MyToken || null // При отсутствии токена берется null 
+      });
+
+      if (description === "Успешное создание книги") {
+        expect(responseCreateBook.status).toBe(201);
+      } else {
+        expect(responseCreateBook.status).toBe(400);
+      }
+    }
+  );
+});
+*/
+
+
+
+  // ---------------------------------------------------------------
   describe("Удаление пользователя", () => {
     test("Успешное удаление", async () => {
       const responseDelete = await user.delete({
@@ -147,5 +206,4 @@ describe("Тесты  bookstore через supertest", () => {
       expect(responseInfo.body.message).toBe("User not found!");
     });
   });
-
 });

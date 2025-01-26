@@ -47,7 +47,7 @@ const obj = arr.reduce(
   {
     odd: 0,
     even: 0,
-  }
+  },
 );
 console.log(obj);
 
