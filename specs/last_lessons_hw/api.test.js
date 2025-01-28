@@ -1,26 +1,33 @@
-
+import { addMsg } from "jest-html-reporters/helper";
 import { faker } from "@faker-js/faker/locale/en";
 const url = "https://bookstore.demoqa.com";
 
- 
+const nickname = faker.string.alpha({ length: 19 });
 
 describe("Тесты создания пользователя на букстор", () => {
   it("Создание пользователя успешно", async () => {
+    
     const response = await fetch(`${url}/Account/v1/User`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        userName: nickname,
 
-        userName:  faker.string.alpha({ length: 19 }),
         password: "123Abcdef!",
       }),
     });
-     // console.log("response.status", response.status);
-    const data = await response.json();
+addMsg({
+  message: `
+    Доступы:
+    nickname: ${nickname}
+    Пароль: 123Abcdef!`,
+  null: null, count: 2
+});
+ 
+   const data = await response.json();
     // console.log(data);
-
     expect(response.status).toEqual(201);
     expect(data).toHaveProperty("userID");
   });
@@ -57,7 +64,7 @@ describe("Тесты создания пользователя на буксто
     const data = await response.json();
     expect(response.status).toEqual(400);
     expect(data.message).toContain(
-      "Passwords must have at least one non alphanumeric character",
+      "Passwords must have at least one non alphanumeric character"
     );
   });
 });
@@ -68,14 +75,15 @@ describe("Тесты получения токена на букстор", () =>
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userName: "bob",
+        userName: nickname,
+        // userName: "bob",
         password: "123Abcdef!",
       }),
     });
 
     const data = await getToken.json();
-    console.log("status", getToken.status);
-    console.log("data.token", data);
+    // console.log("status", getToken.status);
+    // console.log("data.token", data);
     expect(data.status).toBe("Success");
     expect(typeof data.token).toEqual("string");
   });
@@ -91,9 +99,8 @@ describe("Тесты получения токена на букстор", () =>
     });
 
     const data = await getToken.json();
-    console.log("status", getToken.status);
-    console.log("data.token", data);
+    //  console.log("status", getToken.status);
+    //  console.log("data.token", data);
     expect(data.status).toBe("Failed");
   });
-
 });
