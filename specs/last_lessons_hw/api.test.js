@@ -1,4 +1,8 @@
+
+import { faker } from "@faker-js/faker/locale/en";
 const url = "https://bookstore.demoqa.com";
+
+ 
 
 describe("Тесты создания пользователя на букстор", () => {
   it("Создание пользователя успешно", async () => {
@@ -8,16 +12,17 @@ describe("Тесты создания пользователя на буксто
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userName: "bobywn",
+
+        userName:  faker.string.alpha({ length: 19 }),
         password: "123Abcdef!",
       }),
     });
-    console.log("response.status", response.status);
+     // console.log("response.status", response.status);
     const data = await response.json();
-    console.log(data.username);
+    // console.log(data);
 
     expect(response.status).toEqual(201);
-    expect(data.username).toBe("bobywn");
+    expect(data).toHaveProperty("userID");
   });
 
   // второй тест
@@ -90,4 +95,5 @@ describe("Тесты получения токена на букстор", () =>
     console.log("data.token", data);
     expect(data.status).toBe("Failed");
   });
+
 });
