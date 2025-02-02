@@ -110,8 +110,9 @@ const config = {
    reporters: [
     "default", ['jest-html-reporters', {
       "publicPath": './reports/html-report',
-    "filename": 'index.html',
-    "openReport": !process.env.CI
+    "filename": 'index.html'
+    // не забудь вернуть запятую выше 
+    // "openReport": !process.env.CI
     }],
    ],
 
