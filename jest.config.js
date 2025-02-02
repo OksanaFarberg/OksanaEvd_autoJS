@@ -109,10 +109,10 @@ const config = {
   // Use this configuration option to add custom reporters to Jest
    reporters: [
     "default", ['jest-html-reporters', {
-      "publicPath": './reports/html-report',
+      "publicPath": 'reports/html-report',
     "filename": 'index.html'
     // не забудь вернуть запятую выше 
-    // "openReport": !process.env.CI
+     // "openReport": !process.env.CI
     }],
    ],
 

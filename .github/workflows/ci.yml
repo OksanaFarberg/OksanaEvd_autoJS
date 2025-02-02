@@ -4,9 +4,11 @@ name: CI
 
 on:
   push:
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    branches: [ main ]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -44,6 +46,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run format
+
+      
 
   test:
     environment:
@@ -84,6 +88,6 @@ jobs:
     steps:
       - run: |
           curl --request POST \
-               --url https://api.telegram.org/bot${{secrets.TELEGRAM_TOKEN}}/sendMessage \
+               --url https://api.telegram.org/bot${{variables.TELEGRAM_TOKEN}}/sendMessage \
                --header 'Content-Type: application/json' \
                 --data '{ "chat_id": "${{secrets.TELEGRAM_CHAT_ID}}", "text": "Report link: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
