@@ -50,20 +50,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
-        steps:
-          - uses: actions/checkout@v3
-          - name: Проверить файлы
-            run: |
-              ls -la reports/html-reports
-              if [ ! -d "reports/html-reports" ]; then
-                mkdir -p reports/html-reports
-              fi
-          - name: Upload artifact
-            uses: actions/upload-pages-artifact@v3
-            with:
-              path: reports/html-reports
-              name: github-pages
-              retention-days: 1
+        run: |
+          ls -la reports/html-reports
+          if [ ! -d "reports/html-reports" ]; then
+            mkdir -p reports/html-reports
+          fi
   deployment:
     - name: Deploy to GitHub Pages
       id: deployment
