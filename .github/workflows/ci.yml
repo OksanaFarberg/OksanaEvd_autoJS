@@ -55,16 +55,15 @@ jobs:
           if [ ! -d "reports/html-reports" ]; then
             mkdir -p reports/html-reports
           fi
-  deployment:
-      name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
-      notification:
-        if: always()
-      needs: [eslint, prettier, test]
-      environment:
-        name: github-pages
-        url: ${{ steps.deployment.outputs.page_url }}
+  notification:
+    if: always()
+    needs: [ codestyle, test ]
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+
       runs-on: ubuntu-latest
       steps:
         - run: |
