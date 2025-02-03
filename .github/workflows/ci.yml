@@ -1,38 +1,48 @@
-name: CI
+name: CI Workflow
 on:
   push:
   workflow_dispatch:
-    # Allows you to run this workflow manually from the Actions tab
+
 permissions:
   contents: read
   pages: write
   id-token: write
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+
 concurrency:
   group: 'pages'
   cancel-in-progress: false
+
 jobs:
   eslint:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.0
-          cache: 'npm'
+      - uses: actions/cache@v4
+        cache: 'npm'
       - run: npm ci
       - run: npm run lint
+
   prettier:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.0
-          cache: 'npm'
+      - uses: actions/cache@v4
+        cache: 'npm'
       - run: npm ci
       - run: npm run format
+
   test:
     environment:
       name: github-pages
@@ -43,7 +53,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.0
-          cache: 'npm'
+      - uses: actions/cache@v4
+        cache: 'npm'
       - run: npm ci
       - run: echo "${{secrets.ENV_FILE}}" >> .env
       - run: npm run test
@@ -55,18 +66,16 @@ jobs:
           if [ ! -d "reports/html-reports" ]; then
             mkdir -p reports/html-reports
           fi
+
   notification:
     if: always()
-    needs: [ codestyle, test ]
-
+    needs: [codestyle, test]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-
-      runs-on: ubuntu-latest
-      steps:
-        - run: |
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
             curl --request POST \
               --url https://api.telegram.org/bot${{vars.TELEGRAM_TOKEN}}/sendMessage \
               --header 'Content-Type: application/json' \
