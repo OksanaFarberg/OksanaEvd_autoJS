@@ -63,17 +63,13 @@ jobs:
       - run: npm ci
       - run: echo "${{secrets.ENV_FILE}}" >> .env
       - run: npm test
-      - name: Archive Jest reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: jest-report
-          path: reports/jest
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'reports/jest'
+          name: jest-report
+          path: reports/jest
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
