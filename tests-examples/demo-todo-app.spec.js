@@ -394,7 +394,7 @@ test.describe('Routing', () => {
   test('should highlight the currently applied filter', async ({ page }) => {
     await expect(page.getByRole('link', { name: 'All' })).toHaveClass('selected');
 
-    //create locators for active and completed links
+    // create locators for active and completed links
     const activeLink = page.getByRole('link', { name: 'Active' });
     const completedLink = page.getByRole('link', { name: 'Completed' });
     await activeLink.click();
@@ -424,7 +424,7 @@ async function createDefaultTodos(page) {
  */
  async function checkNumberOfTodosInLocalStorage(page, expected) {
   return await page.waitForFunction(e => {
-    return JSON.parse(localStorage['react-todos']).length === e;
+    return JSON.parse(window.localStorage.getItem('react-todos')).length === e;
   }, expected);
 }
 
@@ -434,7 +434,8 @@ async function createDefaultTodos(page) {
  */
  async function checkNumberOfCompletedTodosInLocalStorage(page, expected) {
   return await page.waitForFunction(e => {
-    return JSON.parse(localStorage['react-todos']).filter(i => i.completed).length === e;
+    return JSON.parse(window.localStorage.getItem('react-todos'))
+    .filter(i => i.completed).length === e;
   }, expected);
 }
 
@@ -443,7 +444,8 @@ async function createDefaultTodos(page) {
  * @param {string} title
  */
 async function checkTodosInLocalStorage(page, title) {
-  return await page.waitForFunction(t => {
-    return JSON.parse(localStorage['react-todos']).map(i => i.title).includes(t);
+  return await page.waitForFunction((t) => {
+    return JSON.parse(window.localStorage.getItem('react-todos'))
+      .some(i => i.title === t);
   }, title);
 }
