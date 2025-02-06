@@ -5,6 +5,9 @@
 
 /** @type {import('jest').Config} */
 const config = {
+
+  // testPathIgnorePatterns: ["/node_modules/", "e2e"], // Игнорируем папку E2E-тестов- не работает
+  
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -165,6 +168,7 @@ const config = {
   //   "**/__tests__/**/*.[jt]s?(x)",
   //   "**/?(*.)+(spec|test).[tj]s?(x)"
   // ],
+   testMatch: ['**/specs/**/?(*.)+(spec|test).[tj]s?(x)'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
