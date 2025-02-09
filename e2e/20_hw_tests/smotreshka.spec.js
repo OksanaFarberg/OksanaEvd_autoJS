@@ -32,41 +32,14 @@ test.describe('Smotreshka UI Tests', () => {
   await page.waitForLoadState('load');
     await expect(page).toHaveURL(baseURL);
     await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
-    
     await expect(page.getByText('saymyname')).toBeVisible();
   });
-
- 
-
-  });
+// Тут происходит разлогинивание, как избежать,чтобы не было его?? 
+  test('Запуск телеканала', async ({ page }) => {
+    await page.goto(`${baseURL}/channels/now`);
    
+  });
+    
+  });
 
-// =------
-
-//   test('Выход из аккаунта', async ({ page }) => {
-//     await page.goto(baseURL);
-//     await page.locator('[data-testid="btn-profile"]').click();
-//     await page.locator('[data-testid="btn-logout"]').click();
-//     await expect(page.locator('[data-testid="btn-login"]')).toBeVisible();
-//   });
-
-//   test('Просмотр телеканала', async ({ page }) => {
-//     await page.goto(baseURL);
-//     await page.locator('[data-testid="channel-card"]').first().click();
-//     await expect(page.locator('[data-testid="video-player"]')).toBeVisible();
-//   });
-
-//   test('Переключение каналов', async ({ page }) => {
-//     await page.goto(baseURL);
-//     await page.locator('[data-testid="channel-card"]').first().click();
-//     await page.locator('[data-testid="btn-next-channel"]').click();
-//     await expect(page.locator('[data-testid="video-player"]')).toBeVisible();
-//   });
-
-//   test('Поиск телеканала', async ({ page }) => {
-//     await page.goto(baseURL);
-//     const channelName = 'Первый канал';
-//     await page.locator('[data-testid="search-input"]').fill(channelName);
-//     await expect(page.locator('[data-testid="search-results"]')).toContainText(channelName);
-//   });
-
+  
