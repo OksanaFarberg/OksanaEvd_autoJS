@@ -10,7 +10,7 @@
     "lint:ci": "eslint .",
     "lint": "eslint . --fix",
     "test": "jest --verbose",
-    "pw": "playwright test --ui",
+    "pw": "playwright test",
     "test:e2e:ci": "playwright test",
     "test:e2e:trace": "playwright test --trace on",
     "test:e2e:slow": "cross-env PLAYWRIGHT_SLOW_MO=1000 playwright test --headed",
