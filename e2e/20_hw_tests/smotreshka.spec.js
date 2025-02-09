@@ -75,7 +75,7 @@ test.describe('Smotreshka UI Tests', () => {
   
   });
 
-  test('Проверяем загрузку страницы Профилей', async ({ browser }) => {
+  test('Создаем новый профиль', async ({ browser }) => {
     const context = await browser.newContext({
       storageState: authStateFile,  // Загружаем состояние из файла
     });
