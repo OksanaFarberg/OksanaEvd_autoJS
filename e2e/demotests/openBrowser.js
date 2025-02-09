@@ -5,6 +5,7 @@ import playwright from 'playwright';
 (async () => {
   for (const browserType of ['chromium']) {
     const browser = await playwright[browserType].launch({
+      // отображать или нет браузер
       headless: false,
       slowMo: 500
     });
@@ -13,7 +14,7 @@ import playwright from 'playwright';
     const page = await context.newPage();
 
     await page.goto('https://yandex.ru/')
-    await page.screenshot({ path: `screenshots/exp-${browserType}${Date.now()}.png` });
+    await page.screenshot({ path: `screenshots/ewxp-${browserType}${Date.now()}.png` });
 
     await browser.close();
   }
