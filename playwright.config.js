@@ -30,7 +30,7 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
     browserName: 'chromium',
-    headless: false,
+    headless: true,
     baseURL: 'https://authenticationtest.com',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
