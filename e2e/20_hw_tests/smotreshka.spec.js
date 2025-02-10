@@ -8,40 +8,49 @@ const password = process.env.TEST_SMOTRESHKA_PASS;
 
 const authStateFile = './e2e/20_hw_tests/auth.json';
 
+// Добавляю состояние браузера и страницы, чтобы не открывать на каждый тест заново
+
+let context;
+let page;
+
+
 test.describe('Smotreshka UI Tests', () => {
-  test('Авторизация', async ({ browser }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    
+  test.beforeAll(async ({ browser }) => {
+    // Создаем один контекст на все тесты
+    context = await browser.newContext();
+    page = await context.newPage();
+
+    // Авторизация перед всеми тестами
     await page.goto(`${baseURL}/login`);
     await page.waitForLoadState('load');
 
     await page.getByText('По логину').click();
     await page.getByRole('textbox', { name: 'Логин' }).fill(login);
     await page.getByRole('textbox', { name: 'Пароль' }).fill(password);
-   
     await page.getByRole('button', { name: 'Далее' }).click();
-    await page.waitForTimeout(18000); // Ждем 18 секунд
-
+    await page.waitForTimeout(2000);
+    
     await page.waitForLoadState('load');
     await page.getByRole('button', { name: 'Далее' }).click();
     await page.getByRole('button', { name: 'Перейти к просмотру' }).click();
     await page.waitForLoadState('load');
-    
-    // Сохраняем состояние авторизации в файл
+
+    // Сохраняем авторизованное состояние
     await context.storageState({ path: authStateFile });
+
     await expect(page).toHaveURL(baseURL);
     await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
     await expect(page.getByText('saymyname')).toBeVisible();
   });
 
-  test('Проверка работы поиска', async ({ browser }) => {
+  test('Проверка работы поиска', async () => {
     // Используем сохраненное состояние авторизации
-    const context = await browser.newContext({
-      storageState: authStateFile,  // Загружаем состояние из файла
-    });
-    const page = await context.newPage();
+    // const context = await browser.newContext({
+    //   storageState: authStateFile,  // Загружаем состояние из файла
+    // });
+    // const page = await context.newPage();
     await page.goto(`${baseURL}/channels/now`);
+    await page.waitForTimeout(3000);
     await page.getByRole('textbox', { name: 'Что хотите посмотреть?' }).fill('пер');
     
     await page.getByRole('textbox', { name: 'Что хотите посмотреть?' }).press('Enter');
@@ -49,24 +58,26 @@ test.describe('Smotreshka UI Tests', () => {
     await expect(page.getByRole('main')).toContainText('Первый канал');
   });
 
-  test('Проверяем загрузку страницы Кинотеатры', async ({ browser }) => {
-    const context = await browser.newContext({
-      storageState: authStateFile,  // Загружаем состояние из файла
-    });
-    const page = await context.newPage();
+  test('Проверяем загрузку страницы Кинотеатры', async () => {
+    // const context = await browser.newContext({
+    //   storageState: authStateFile,  // Загружаем состояние из файла
+    // });
+    // const page = await context.newPage();
     await page.goto(`${baseURL}/vod`);
+    await page.waitForTimeout(2000);
     await page.getByRole('link', { name: 'Кинотеатр' }).click();
     await expect(page.getByRole('heading', { name: 'Кинотеатр' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'AMEDIATEKA' })).toBeVisible();
   });
 
-  test('Проверяем загрузку страницы Моё', async ({ browser }) => {
-    const context = await browser.newContext({
-      storageState: authStateFile,  // Загружаем состояние из файла
-    });
-    const page = await context.newPage();
+  test('Проверяем загрузку страницы Моё', async () => {
+    // const context = await browser.newContext({
+    //   storageState: authStateFile,  // Загружаем состояние из файла
+    // });
+   //  const page = await context.newPage();
     await page.goto(`${baseURL}/my`);
-    await page.waitForLoadState('load');
+    await page.waitForTimeout(3000);
+    // await page.waitForLoadState('load');
 
      // Проверка наличия заголовка с нужным  текстом
   const header = await page.locator('h1');
@@ -75,11 +86,11 @@ test.describe('Smotreshka UI Tests', () => {
   
   });
 
-  test('Создаем новый профиль', async ({ browser }) => {
-    const context = await browser.newContext({
-      storageState: authStateFile,  // Загружаем состояние из файла
-    });
-    const page = await context.newPage();
+  test('Создаем новый профиль', async () => {
+    // const context = await browser.newContext({
+    //   storageState: authStateFile,  // Загружаем состояние из файла
+    // });
+    // const page = await context.newPage();
     await page.goto(`${baseURL}/personal/profiles`);
     await page.waitForLoadState('load');
 
@@ -89,7 +100,7 @@ test.describe('Smotreshka UI Tests', () => {
     await page.locator('.clickable-overlay').click();
     await page.locator('a').filter({ hasText: 'Обычный' }).click();
     await page.getByRole('button', { name: 'Сохранить' }).click();
-    await page.waitForTimeout(2000); // Ждем 2 секунды
+    await page.waitForTimeout(5000); // Ждем 2 секунды
 
     if(await page.getByRole('textbox', { name: 'Пароль' }).isVisible()) {
       await page.getByRole('textbox', { name: 'Пароль' }).click();
@@ -97,7 +108,7 @@ test.describe('Smotreshka UI Tests', () => {
     }
  
     await page.getByRole('button', { name: 'Сохранить' }).click();
-    await page.waitForTimeout(12000);
+    await page.waitForTimeout(5000);
     // await expect(page.getByText('pro')).toBeVisible();
     // проверяю, что хотя бы у одного элемента с классом name название pro
     const count = await page.locator('.name').filter({ hasText: 'pro' }).count();
@@ -105,6 +116,11 @@ test.describe('Smotreshka UI Tests', () => {
 
   });
 
+
+  test.afterAll(async () => {
+    // Закрываем браузерный контекст после всех тестов
+    await context.close();
+  });
 });
 
     

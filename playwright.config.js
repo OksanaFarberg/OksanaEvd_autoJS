@@ -33,6 +33,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
+    // добавили слоумо в браузер
     launchOptions: {
       slowMo: parseInt(process.env.PLAYWRIGHT_SLOW_MO ?? '0')
     }
