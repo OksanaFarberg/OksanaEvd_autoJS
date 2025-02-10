@@ -9,14 +9,11 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-/**
- * @see https://playwright.dev/docs/test-configuration
- */
 export default defineConfig({
   timeout: 30000,
   testDir: './e2e',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -30,11 +27,15 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
     browserName: 'chromium',
-    headless: true,
+    // headless: false - отображать браузер
+    headless: false,
     baseURL: 'https://authenticationtest.com',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
+    launchOptions: {
+      slowMo: parseInt(process.env.PLAYWRIGHT_SLOW_MO ?? '0')
+    }
   },
 
   /* Configure projects for major browsers */

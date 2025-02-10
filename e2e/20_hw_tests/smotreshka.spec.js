@@ -98,8 +98,11 @@ test.describe('Smotreshka UI Tests', () => {
  
     await page.getByRole('button', { name: 'Сохранить' }).click();
     await page.waitForTimeout(12000);
-    await expect(page.getByText('pro')).toBeVisible();
-  
+    // await expect(page.getByText('pro')).toBeVisible();
+    // проверяю, что хотя бы у одного элемента с классом name название pro
+    const count = await page.locator('.name').filter({ hasText: 'pro' }).count();
+   expect(count).toBeGreaterThan(0);
+
   });
 
 });
