@@ -4,6 +4,7 @@ test-result/*
 reports/*
 
 
+
 # Playwright
 /test-results/
 /playwright-report/
