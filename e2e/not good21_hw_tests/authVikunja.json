@@ -1,0 +1,30 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://try.vikunja.io",
+      "localStorage": [
+        {
+          "name": "hideAddToHomeScreenMessage",
+          "value": "false"
+        },
+        {
+          "name": "navigation-child-projects-open",
+          "value": "{}"
+        },
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImVtYWlsUmVtaW5kZXJzRW5hYmxlZCI6ZmFsc2UsImV4cCI6MTczOTUyNjYyNCwiaWQiOjI5LCJpc0xvY2FsVXNlciI6dHJ1ZSwibG9uZyI6ZmFsc2UsIm5hbWUiOiIiLCJ0eXBlIjoxLCJ1c2VybmFtZSI6InNheW15bmFtZSJ9.p_x-djLjKnBherBF2g1XJpAl9TztUgtFZjvGna-U9Xg"
+        },
+        {
+          "name": "menuActiveDesktopPreference",
+          "value": "true"
+        },
+        {
+          "name": "API_URL",
+          "value": "https://try.vikunja.io/api/v1"
+        }
+      ]
+    }
+  ]
+}

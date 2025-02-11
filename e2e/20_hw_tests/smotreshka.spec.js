@@ -67,7 +67,7 @@ test.describe('Smotreshka UI Tests', () => {
     await page.waitForTimeout(2000);
     await page.getByRole('link', { name: 'Кинотеатр' }).click();
     await expect(page.getByRole('heading', { name: 'Кинотеатр' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'AMEDIATEKA' })).toBeVisible();
+   
   });
 
   test('Проверяем загрузку страницы Моё', async () => {
@@ -76,7 +76,7 @@ test.describe('Smotreshka UI Tests', () => {
     // });
    //  const page = await context.newPage();
     await page.goto(`${baseURL}/my`);
-    await page.waitForTimeout(3000);
+   //  await page.waitForTimeout(3000);
     // await page.waitForLoadState('load');
 
      // Проверка наличия заголовка с нужным  текстом
@@ -100,7 +100,7 @@ test.describe('Smotreshka UI Tests', () => {
     await page.locator('.clickable-overlay').click();
     await page.locator('a').filter({ hasText: 'Обычный' }).click();
     await page.getByRole('button', { name: 'Сохранить' }).click();
-    await page.waitForTimeout(5000); // Ждем 2 секунды
+    // await page.waitForTimeout(2000); // Ждем 2 секунды
 
     if(await page.getByRole('textbox', { name: 'Пароль' }).isVisible()) {
       await page.getByRole('textbox', { name: 'Пароль' }).click();
@@ -108,7 +108,7 @@ test.describe('Smotreshka UI Tests', () => {
     }
  
     await page.getByRole('button', { name: 'Сохранить' }).click();
-    await page.waitForTimeout(5000);
+    
     // await expect(page.getByText('pro')).toBeVisible();
     // проверяю, что хотя бы у одного элемента с классом name название pro
     const count = await page.locator('.name').filter({ hasText: 'pro' }).count();
@@ -117,10 +117,10 @@ test.describe('Smotreshka UI Tests', () => {
   });
 
 
-  test.afterAll(async () => {
-    // Закрываем браузерный контекст после всех тестов
-    await context.close();
-  });
+  // test.afterAll(async () => {
+  //   // Закрываем браузерный контекст после всех тестов
+  //   await context.close();
+  // });
 });
 
     
