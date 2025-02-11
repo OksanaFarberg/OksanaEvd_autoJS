@@ -3,4 +3,4 @@ hi!
 # записатþ
 $ npx playwright test --trace on
 # посмотретþ
-$ npx playwright show-report -->
+$ npx playwright show-report   -->
