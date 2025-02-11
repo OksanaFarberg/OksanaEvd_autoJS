@@ -13,7 +13,7 @@
     "pw": "playwright test",
     "test:e2e:ci": "playwright test",
     "test:e2e:trace": "playwright test --trace on",
-    "test:e2e:slow": "cross-env PLAYWRIGHT_SLOW_MO=1000 playwright test --headed",
+    "test:e2e:slow": "cross-env PLAYWRIGHT_SLOW_MO=2000 playwright test --headed",
     "test:e2e:show": "playwright show-report",
     "codestyle:ci": "run-p lint:ci format:ci",
     "codestyle": "run-s lint format",
