@@ -14,7 +14,6 @@
     "codestyle": "run-s lint format",
     "build": "babel src --out-dir build --source-maps inline",
     "coverage": "jest --coverage",
-    "prepare": "husky",
     "test:report": "jest --reporters=default --reporters=jest-html-reporters --json --outputFile=reports/html-reports/test-results.json"
   },
   "author": "Oksana EVD",
@@ -47,7 +46,6 @@
     "ajv": "^8.17.1",
     "dotenv": "^16.4.7",
     "es-module-lexer": "^1.6.0",
-    "husky": "^9.1.5",
     "node-fetch": "^2.7.0"
   }
 }
