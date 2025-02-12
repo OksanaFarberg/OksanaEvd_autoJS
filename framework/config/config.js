@@ -1,4 +1,4 @@
-// базовый урл , логин /  пароль
+// базовый урл ,  логин /  пароль
 
 const config = {
   url: "https://bookstore.demoqa.com",
