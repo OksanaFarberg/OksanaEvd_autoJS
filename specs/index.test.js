@@ -14,7 +14,7 @@ describe("Тесты  bookstore через supertest", () => {
   describe("Создание пользователя", () => {
     test("Успешная создание", async () => {
       const res = await user.create(config.credential);
-      console.log("MyUserID получили-", res.body.userID);
+      // console.log("MyUserID получили-", res.body.userID);
 
       expect(res.status).toBe(201);
       expect(res.body.userID).toBeTruthy();
@@ -56,7 +56,7 @@ describe("Тесты  bookstore через supertest", () => {
         userId: MyUserID,
         token: MyToken,
       });
-      console.log("мой юзер айди", MyUserID);
+      // console.log("мой юзер айди", MyUserID);
       expect(responseInfo.status).toBe(200);
     });
   });
@@ -150,43 +150,6 @@ describe("Тесты  bookstore через supertest", () => {
       expect(responseDeleteBook.status).toBe(204);
     });
   });
-// Добавила параметриз. тест создания книги, но это выглядит очень громоздко
-
-/* 
-describe("Параметр.тесты создания книги", () => {
-  const validIsbns = ['9781449325862', '9781449365035'];
-  const invalidIsbns = ['0123', '456'];
-  const emptyArrayIsbn = [];
-
-  test.each([
-    { description: "парам.Успешное создание книги", isbn: validIsbns[0] },
-    { description: "парам.Отсутствие токена", isbn: validIsbns[0] },
-    { description: "парам.Неверный ISBN", isbn: invalidIsbns[0] },
-    { description: "парам.Пустой массив ISBN", isbn: emptyArrayIsbn }
-  ])(
-    "%s",
-    async ({ description, isbn }) => {
-      if (MyToken) {
-        console.log("Токен получен -", MyToken);
-        console.log("ISBN получен -", isbn);
-      }
-
-      const responseCreateBook = await bookService.createBook({
-        userId: MyUserID,
-        isbns: [isbn],
-        token: MyToken || null // При отсутствии токена берется null 
-      });
-
-      if (description === "Успешное создание книги") {
-        expect(responseCreateBook.status).toBe(201);
-      } else {
-        expect(responseCreateBook.status).toBe(400);
-      }
-    }
-  );
-});
-*/
-
 
 
   // ---------------------------------------------------------------
