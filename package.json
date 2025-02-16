@@ -10,6 +10,7 @@
     "lint:ci": "eslint .",
     "lint": "eslint . --fix",
     "test": "jest --verbose",
+    "test": "jest --runInBand",
     "codestyle:ci": "run-p lint:ci format:ci",
     "codestyle": "run-s lint format",
     "build": "babel src --out-dir build --source-maps inline",

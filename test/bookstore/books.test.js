@@ -1,84 +1,145 @@
-import { generateUserCredentials } from '../framework/fixtures/userFixture.js';
-import { createUser } from '../framework/services/authService.js';
-import { createBook, getBookByISBN } from '../framework/services/bookService.js';
+import { bookService, user } from "../../framework/services/services";
+import config from "../../framework/config/config";
+import { books } from "../../framework/fixtures/Books";
 
-describe('Book creation tests', () => {
-  let creds;
-  let userId;
+describe("Создание/ Обновление / Удаление книги", () => {
+  // в переменные запишем значения после создания пользователя
+  let MyUserID = "";
+  let MyToken = "";
+
+  const [book1, book2] = books;
+  const isbn = book1.isbn;
+  const incorrectIsbn = 12345;
+
+  // получим токен и сохраним его в переменную
 
   beforeAll(async () => {
-    creds = generateUserCredentials();
-    const username = creds.username;
-    const password = creds.password;
-
-    const userResponse = await createUser({ userName: username, password: password });
-    userId = userResponse.data.userID;
+    const responseCreate = await user.create(config.credential);
+    MyUserID = responseCreate.body.userID;
+    const res = await user.token(config.credential);
+    MyToken = res.body.token;
+    // console.log("MyToken успешно получен, ", MyToken);
   });
 
-  describe('Book creation tests', () => {
-    it('should successfully create a book for the user', async () => {
-      const response = await createBook({
-        userId,
-        collectionOfIsbns: [{ isbn: '9781449331818' }],
-        username: creds.username,
-        password: creds.password
+  describe("Создание книги", () => {
+    test("Успешное создание книги", async () => {
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: [isbn],
+        token: MyToken,
       });
-
-      expect(response.status).toBe(201);
-      expect(response.data.books).toBeDefined();
-      expect(response.data.books.length).toBeGreaterThan(0);
-      expect(response.data.books[0].isbn).toBe('9781449331818');
+      expect(responseCreateBook.status).toBe(201);
     });
 
-    it('should return an error when creating a book with invalid ISBN', async () => {
-      const response = await createBook({
-        userId,
-        collectionOfIsbns: [{ isbn: 'invalid_isbn' }],
-        username: creds.username,
-        password: creds.password
+    test("Книга не создана, нет токена", async () => {
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: [isbn],
+        token: null,
       });
-
-      expect(response.status).toBe(400);
-      expect(response.data.message).toBe('ISBN supplied is not available in Books Collection!');
+     
+      expect(responseCreateBook.status).toBe(401);
+      expect(responseCreateBook.data.message).toContain("User not authorized");
     });
 
-    it('should return an error when creating a book without authorization', async () => {
-      const response = await createBook({
-        userId,
-        collectionOfIsbns: [{ isbn: '9781449331818' }],
-        username: creds.username,
-        password: 'invalid_password'
+    test("Книга не создана, Неверный ISBN", async () => {
+      
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: [incorrectIsbn],
+        token: MyToken,
+      });
+      expect(responseCreateBook.status).toBe(400);
+      expect(responseCreateBook.data.message).toContain(
+        "ISBN supplied is not available"
+      );
+    });
+
+    test("Пустой массив ISBN", async () => {
+      const emptyArrayIsbn = [];
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: emptyArrayIsbn,
+        token: MyToken,
       });
 
-      expect(response.status).toBe(401);
-      expect(response.data.message).toBe('User not authorized!');
+      expect(responseCreateBook.status).toBe(400);
+    });
+  });
+  describe("Получение информации о книге", () => {
+    test("Успешное получение информации о книге", async () => {
+      const responseInfoBook = await bookService.getInfoBook({
+        isbn,
+        token: MyToken,
+      });
+       expect(responseInfoBook.status).toBe(200);
+    });
+
+    test("Неуспешное получение инфо, Неверный ISBN", async () => {
+      const responseInfoBook = await bookService.getInfoBook({
+        isbn: incorrectIsbn,
+        token: MyToken,
+      });
+      expect(responseInfoBook.status).toBe(400);
     });
   });
 
-  describe('Receive books by ISBN tests', () => {
-    it('should successfully return book details for a valid ISBN', async () => {
-      const isbn = '9781449331818';
-      const response = await getBookByISBN(isbn);
+  describe("Обновление книги", () => {
+    test("Успешное обновление книги", async () => {
+      const responseUpdateBook = await bookService.updateBook({
+        userId: MyUserID,
+        isbn,
+        newIsbn: book2.isbn,
+        token: MyToken,
+      });
 
-      expect(response.status).toBe(200);
-      expect(response.data.isbn).toBe(isbn);
-      expect(response.data.title).toBe('Learning JavaScript Design Patterns');
-      expect(response.data.author).toBe('Addy Osmani');
+      expect(responseUpdateBook.status).toBe(200);
     });
 
-    it('should return an error for an invalid ISBN', async () => {
-      const isbn = 'invalid_isbn';
-      const response = await getBookByISBN(isbn);
+    test("Неуспешное обновление книги, Неверный ISBN", async () => {
+      const responseUpdateBook = await bookService.updateBook({
+        userId: MyUserID,
+        isbn:  incorrectIsbn,
+        newIsbn: book2.isbn,
+        token: MyToken,
+      });
 
-      expect(response.status).toBe(400);
-      expect(response.data.message).toBe('ISBN supplied is not available in Books Collection!');
+      expect(responseUpdateBook.status).toBe(400);
+      expect(responseUpdateBook.data.message).toContain(
+        "ISBN supplied is not available"
+      );
+    });
+  });
+
+  describe("Удаление книги", () => {
+    test("Успешное удаление книги", async () => {
+      const responseDeleteBook = await bookService.deleteBook({
+        userId: MyUserID,
+        isbn: book2.isbn,
+        token: MyToken,
+      });
+
+      expect(responseDeleteBook.status).toBe(204);
     });
 
-    it('should return an error when ISBN is missing', async () => {
-      const response = await getBookByISBN('');
+    test("Неуспешное удаление книги, не передали userID", async () => {
+      const responseDeleteBook = await bookService.deleteBook({
+        userId: null,
+        isbn,
+        token: MyToken,
+      });
 
-      expect(response.status).toBe(400);
-      expect(response.data.message).toBe('ISBN supplied is not available in Books Collection!');
+      expect(responseDeleteBook.status).toBe(401);
+      expect(responseDeleteBook.data.message).toContain("User Id not correct!");
+    });
+  });
+
+  // --------------------
+  // Удаляем аккаунт после тестов
+  afterAll(async () => {
+    await user.delete({
+      userId: MyUserID,
+      token: MyToken,
     });
   });
 });
