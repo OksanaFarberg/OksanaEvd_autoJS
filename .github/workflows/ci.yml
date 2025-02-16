@@ -62,6 +62,8 @@ jobs:
           node-version: 20.11.0
           cache: 'npm'
       - run: npm ci
+      - run: echo "USERNAME=${{ vars.USERNAME }}" >> .env
+      - run: echo "PASSWORD=${{ vars.PASSWORD }}" >> .env
       - run: echo "${{secrets.ENV_FILE}}" >> .env
       - run: npm test
       - name: Setup Pages

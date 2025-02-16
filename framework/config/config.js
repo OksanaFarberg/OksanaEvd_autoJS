@@ -1,12 +1,14 @@
-// базовый урл ,  логин /  пароль
+import dotenv from "dotenv";
+
+// Загружаем переменные окружения из .env файла
+dotenv.config();
 
 const config = {
-  url: "https://bookstore.demoqa.com",
+  url: "https://bookstore.demoqa.com", // URL остается фиксированным
   credential: {
-    userName: "my_logi322ser12345",
-    password: "1234j5678Aa@",
+    userName: process.env.USERNAME || "its_my_login01", // Если USERNAME не задано, используем дефолтное значение
+    password: process.env.PASSWORD || "123456Aabc@", // Если PASSWORD не задано, используем дефолтное значение
   },
-  
 };
 
 export default config;
