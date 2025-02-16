@@ -13,8 +13,8 @@
 ## Важно:
    
    Перед тем как запустить проект, убедитесь, что установлен Node.js:  
-   Проверить версию: **node -v**  
-   Проверить версию **npm: npm -v**
+   Проверить версию node: **node -v**  
+   Проверить версию npm: **npm -v**
 
 
 ## Установка
@@ -32,10 +32,10 @@
 
 3. Установите зависимости:
    ```bash
-    - npm init -y
-    - npm install
-    - npm install dotenv
+    - **npm init -y**
+    - **npm install**
+    - **npm install dotenv**
 
 4. Запуск тестов
     ```bash
-    - npm run test
+    - **npm run test**
