@@ -1,4 +1,3 @@
-
 import { user } from "../../framework/services/services";
 import config from "../../framework/config/config";
 describe("Создание/Авторизация/Удаление аккаунта", () => {
@@ -21,7 +20,7 @@ describe("Создание/Авторизация/Удаление аккаун�
         userName: "string",
         password: "123",
       });
-       expect(res.status).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.message).toContain(
         "Passwords must have at least one non alphanumeric character"
       );
@@ -29,7 +28,7 @@ describe("Создание/Авторизация/Удаление аккаун�
 
     test("Неуспешное создание, пользователь уже существует", async () => {
       const res = await user.create(config.credential);
-      
+
       expect(res.status).toBe(406);
       expect(res.body.message).toBe("User exists!");
     });
@@ -59,7 +58,7 @@ describe("Создание/Авторизация/Удаление аккаун�
       expect(res.status).toBe(200);
       expect(res.body.status).toBe("Success");
       MyToken = res.body.token;
-     // console.log("MyToken успешно получен, = ", MyToken);
+      // console.log("MyToken успешно получен, = ", MyToken);
     });
 
     test("Получение токена неуспешно, неверные данные пользователя", async () => {
@@ -75,32 +74,30 @@ describe("Создание/Авторизация/Удаление аккаун�
   });
 
   describe("Удаление пользователя", () => {
-   
-    
-test("Неуспешное удаление, неверный токен", async () => {
-  const responseDelete = await user.delete({
-    userId: MyUserID,
-    token: "invalidToken",
-  });
-  
-  expect(responseDelete.status).toBe(401);
-  expect(responseDelete.body.message).toContain("User not authorized");
-})
-  });
+    test("Неуспешное удаление, неверный токен", async () => {
+      const responseDelete = await user.delete({
+        userId: MyUserID,
+        token: "invalidToken",
+      });
 
-  test("Успешное удаление", async () => {
-    const responseDelete = await user.delete({
-      userId: MyUserID,
-      token: MyToken,
+      expect(responseDelete.status).toBe(401);
+      expect(responseDelete.body.message).toContain("User not authorized");
     });
-    expect(responseDelete.status).toBe(204);
-    // Проверим, что пользователь удален
-    const responseInfo = await user.info({
-      userId: MyUserID,
-      token: MyToken,
+
+    test("Успешное удаление", async () => {
+      const responseDelete = await user.delete({
+        userId: MyUserID,
+        token: MyToken,
+      });
+      expect(responseDelete.status).toBe(204);
+      // Проверим, что пользователь удален
+      const responseInfo = await user.info({
+        userId: MyUserID,
+        token: MyToken,
+      });
+
+      expect(responseInfo.status).toBe(401);
+      expect(responseInfo.body.message).toBe("User not found!");
     });
-   
-    expect(responseInfo.status).toBe(401);
-    expect(responseInfo.body.message).toBe("User not found!");
   });
 });

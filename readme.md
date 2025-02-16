@@ -26,13 +26,13 @@
    cd OksanaEvd_autoJS
 
 3. Установите зависимости:
-  ```bash
+   ```bash
     - npm init -y
     - npm install
     - npm install dotenv
 
 4. Запуск тестов
- ```bash
+    ```bash
     - npm test
  
  
