@@ -30,18 +30,17 @@ describe("Тесты  book- ов через supertest", () => {
       // console.log("книга создана", responseCreateBook.data);
       expect(responseCreateBook.status).toBe(201);
     });
- 
 
-    test("КНига не создана, нет токена", async () => {
+    test("Книга не создана, нет токена", async () => {
       const responseCreateBook = await bookService.createBook({
         userId: MyUserID,
         isbns: [isbn],
         token: null,
       });
-     // console.log("книга несоздана", responseCreateBook.data);
+      // console.log("книга несоздана", responseCreateBook.data);
 
       expect(responseCreateBook.status).toBe(401);
-      expect(responseCreateBook.data.message).toContain('User not authorized');
+      expect(responseCreateBook.data.message).toContain("User not authorized");
     });
 
     test("Книга не создана, Неверный ISBN", async () => {
@@ -51,57 +50,99 @@ describe("Тесты  book- ов через supertest", () => {
         isbns: [invalidIsbn],
         token: MyToken,
       });
-// console.log("книга не создана ИСБН", responseCreateBook.data);
+      // console.log("книга не создана ИСБН", responseCreateBook.data);
       expect(responseCreateBook.status).toBe(400);
-      expect(responseCreateBook.data.message).toContain('ISBN supplied is not available')
-   });
+      expect(responseCreateBook.data.message).toContain(
+        "ISBN supplied is not available"
+      );
+    });
 
- 
-});
-  //   describe("Получение информации о книге", () => {
-  //     test("Успешное получение информации о книге", async () => {
-  //       const responseInfoBook = await bookService.getInfoBook({
-  //         isbn,
-  //         token: MyToken,
-  //       });
-  //       // console.log("получаем инфу о книге", responseInfoBook.data);
-  //       expect(responseInfoBook.status).toBe(200);
-  //     });
-  //   });
+    test("Пустой массив ISBN", async () => {
+      const emptyArrayIsbn = [];
+      const responseCreateBook = await bookService.createBook({
+        userId: MyUserID,
+        isbns: emptyArrayIsbn,
+        token: MyToken,
+      });
 
-  //   describe("Обновление книги", () => {
-  //     test("Успешное обновление книги", async () => {
-  //       const responseUpdateBook = await bookService.updateBook({
-  //         userId: MyUserID,
-  //         isbn,
-  //         newIsbn: book2.isbn,
-  //         token: MyToken,
-  //       });
+      expect(responseCreateBook.status).toBe(400);
+    });
+  });
+  describe("Получение информации о книге", () => {
+    test("Успешное получение информации о книге", async () => {
+      const responseInfoBook = await bookService.getInfoBook({
+        isbn,
+        token: MyToken,
+      });
+      //  console.log("получаем инфу о книге", responseInfoBook.data);
+      expect(responseInfoBook.status).toBe(200);
+    });
 
-  //       // console.log("обновляшка книги", responseUpdateBook.data);
-  //       expect(responseUpdateBook.status).toBe(200);
-  //     });
-  //   });
+    test("Неуспешное получение инфо, Неверный ISBN", async () => {
+      const responseInfoBook = await bookService.getInfoBook({
+        isbn: 1112223334567,
+        token: MyToken,
+      });
+      expect(responseInfoBook.status).toBe(400);
+    });
+  });
 
-  //   describe("Удаление книги", () => {
-  //     test("Успешное удаление книги", async () => {
-  //       const responseDeleteBook = await bookService.deleteBook({
-  //         userId: MyUserID,
-  //         isbn: book2.isbn,
-  //         token: MyToken,
-  //       });
-  //       // console.log("удаление книги", responseDeleteBook.data);
-  //       expect(responseDeleteBook.status).toBe(204);
-  //     });
-  //   });
+  describe("Обновление книги", () => {
+    test("Успешное обновление книги", async () => {
+      const responseUpdateBook = await bookService.updateBook({
+        userId: MyUserID,
+        isbn,
+        newIsbn: book2.isbn,
+        token: MyToken,
+      });
 
-  // ----------------
-  // Удаляем аккаунт
+      expect(responseUpdateBook.status).toBe(200);
+    });
+
+    test("Неуспешное обновление книги, Неверный ISBN", async () => {
+      const responseUpdateBook = await bookService.updateBook({
+        userId: MyUserID,
+        isbn: 12345,
+        newIsbn: book2.isbn,
+        token: MyToken,
+      });
+
+      expect(responseUpdateBook.status).toBe(400);
+      expect(responseUpdateBook.data.message).toContain(
+        "ISBN supplied is not available"
+      );
+    });
+  });
+
+  describe("Удаление книги", () => {
+    test("Успешное удаление книги", async () => {
+      const responseDeleteBook = await bookService.deleteBook({
+        userId: MyUserID,
+        isbn: book2.isbn,
+        token: MyToken,
+      });
+
+      expect(responseDeleteBook.status).toBe(204);
+    });
+
+    test("Неуспешное удаление книги, не передали userID", async () => {
+      const responseDeleteBook = await bookService.deleteBook({
+        userId: null,
+        isbn,
+        token: MyToken,
+      });
+
+      expect(responseDeleteBook.status).toBe(401);
+      expect(responseDeleteBook.data.message).toContain("User Id not correct!");
+    });
+  });
+
+  // --------------------
+  // Удаляем аккаунт после тестов
   afterAll(async () => {
     await user.delete({
       userId: MyUserID,
       token: MyToken,
-   
     });
   });
 });
