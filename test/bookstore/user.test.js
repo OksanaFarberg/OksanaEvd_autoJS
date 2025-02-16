@@ -92,6 +92,7 @@ describe("Создание/Авторизация/Удаление аккаун�
       expect(responseInfo.status).toBe(401);
       expect(responseInfo.body.message).toBe("User not found!");
     });
+    
 test("Неуспешное удаление, неверный токен", async () => {
   const responseDelete = await user.delete({
     userId: MyUserID,
