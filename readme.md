@@ -32,10 +32,10 @@
 
 3. Установите зависимости:
    ```bash
-    - **npm init -y**
-    - **npm install**
-    - **npm install dotenv**
+    - npm init -y
+    - npm install
+    - npm install dotenv
 
 4. Запуск тестов
     ```bash
-    - **npm run test**
+    - npm run test
