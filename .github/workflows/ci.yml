@@ -85,5 +85,5 @@ jobs:
       - run: |
             curl --request POST \
               --url https://api.telegram.org/bot${{vars.TELEGRAM_TOKEN}}/sendMessage \
-              --header 'Content-Type: application/json' \
-              --data '{ "chat_id": "${{secrets.TELEGRAM_CHAT_ID}}", "text": "Эх, раз да еще раз, да еще много..много много много раз..\nReport link: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
+              --header 'Content-Type: application/json' \Эх, раз да еще раз, да еще много..много много много раз..\nReport link: https://github.com/${{ githu
+              --data '{ "chat_id": "${{secrets.TELEGRAM_CHAT_ID}}", "text": "b.repository }}/actions/runs/${{ github.run_id }}" }'
